@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  VPCID:
+    Type: String
+    Description: "ID de la VPC existente"
+
+Resources:
+  ExportedVPCId:
+    Value: !Ref VPCID
+    Export:
+      Name: !Sub "${AWS::StackName}-VPCId"
+
+  ExportedSubnetIds:
+    Value: !Join [",", [!Ref Subnet1, !Ref Subnet2]]
+    Export:
+      Name: !Sub "${AWS::StackName}-SubnetIds"
+
+Outputs:
+  VPCId:
+    Description: "ID de la VPC exportado"
+    Value: !Ref ExportedVPCId
+
+  SubnetIds:
+    Description: "IDs de las subredes exportados"
+    Value: !Ref ExportedSubnetIds
+
+Resources:
+  Subnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCID
+      CidrBlock: "10.0.1.0/24"
+      AvailabilityZone: "us-east-1a"
+
+  Subnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCID
+      CidrBlock: "10.0.2.0/24"
+      AvailabilityZone: "us-east-1b"
